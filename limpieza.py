@@ -31,6 +31,13 @@ df["nombre_ev"] = df["nombre_ev"].replace(errores_nombre_ev)
 # 4. Rellenar valores faltantes en prod_as_ev con nombre_ev
 df["prod_as_ev"].fillna(df["nombre_ev"], inplace=True)
 
+# 📌 4. Rellenar valores faltantes en todas las columnas
+for col in df.columns:
+    if df[col].dtype in ["int64", "float64"]:  # Si es numérica
+        df[col].fillna(df[col].mean(), inplace=True)  # Rellenar con la media
+    else:  # Si es de texto o categórica
+        df[col].fillna("N/A", inplace=True)  # Rellenar con "N/A"
+
 # 5. Normalizar abreviaturas en loc_ev y prov
 abreviaturas = {
     "ZGZ": "Zaragoza", "BCN": "Barcelona", "MAD": "Madrid", "SEV": "Sevilla",
